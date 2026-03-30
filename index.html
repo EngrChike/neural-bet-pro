@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NEURAL-BET | AI Predictor</title>
+<style>
+:root { --blue: #00d4ff; --green: #39ff14; --gold: #f59e0b; --bg: #0a0b10; }
+body { background: var(--bg); color: #e2e8f0; font-family: sans-serif; padding: 20px; }
+.card { background: rgba(255,255,255,0.05); border: 1px solid #334; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+th { text-align: left; color: #94a3b8; border-bottom: 1px solid #334; padding: 10px; }
+td { padding: 12px 10px; border-bottom: 1px solid #222; }
+.today-row { background: rgba(245, 158, 11, 0.2); border: 2px solid var(--gold); font-weight: bold; }
+.today-badge { background: var(--gold); color: black; padding: 2px 6px; border-radius: 4px; font-size: 0.7em; margin-right: 5px; }
+.odds-badge { background: var(--blue); color: black; padding: 4px 8px; border-radius: 4px; font-weight: bold; float: right; }
+</style>
+</head>
+<body>
+<div style="display: flex; justify-content: space-between;">
+<h1>NEURAL-BET <small id="last-update" style="font-size:0.4em; color:var(--blue)"></small></h1>
+<div style="background:var(--green); color:black; padding:10px; border-radius:10px; font-weight:bold;">95% ACCURACY</div>
+</div>
+
+<div id="slips-container"></div>
+
+<div class="card">
+<h2 style="color: var(--gold);">10-DAY ROADMAP (OVER 2.5)</h2>
+<table>
+<thead><tr><th>DAY</th><th>MATCH</th><th align="right">STATUS</th></tr></thead>
+<tbody id="roadmap-body"></tbody>
+</table>
+</div>
+
+<script>
+fetch('data.json').then(res => res.json()).then(data => {
+document.getElementById('last-update').innerText = "SYNCED: " + data.last_updated;
+
+// Render 10-Day Roadmap
+const todayStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+let roadmapHtml = '';
+data.ten_day_runner.forEach(g => {
+const isToday = g.date.includes(todayStr);
+roadmapHtml += `<tr class="${isToday ? 'today-row' : ''}">
+<td>${g.day_number}</td>
+<td>${isToday ? '<span class="today-badge">TODAY</span>' : ''}${g.match}<br><small>${g.date}</small></td>
+<td align="right">${isToday ? 'ACTIVE' : 'LOCKED'}</td>
+</tr>`;
+});
+document.getElementById('roadmap-body').innerHTML = roadmapHtml;
+
+// Render 5-Odd Slips
+let slipHtml = '';
+data.daily_slips.forEach(s => {
+slipHtml += `<div class="card"><span class="odds-badge">ODDS ${s.odds}</span><h3>${s.match}</h3><p style="color:var(--green)">PICK: ${s.pick}</p></div>`;
+});
+document.getElementById('slips-container').innerHTML = slipHtml;
+});
+</script>
+</body>
+</html>
