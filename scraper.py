@@ -3,10 +3,11 @@ import datetime
 import random
 
 def start_engine():
-start_date = datetime.datetime.now()
+# Everything below this must have 4 spaces on the left!
+    start_date = datetime.datetime.now()
 teams = ["Bayern", "Real Madrid", "Man City", "Liverpool", "Napoli", "Dortmund", "Barcelona", "Inter", "PSG", "Ajax"]
 
-# Generate 10-Day Roadmap
+# 1. Generate the 10-Day Roadmap
 roadmap = []
 for i in range(10):
 day_date = start_date + datetime.timedelta(days=i)
@@ -18,7 +19,7 @@ roadmap.append({
 "status": "LOCKED"
 })
 
-# Generate Daily Slips
+# 2. Generate Daily Slips
 slips = [
 {"match": "Arsenal vs Chelsea", "pick": "GG + Over 2.5", "odds": "2.40"},
 {"match": "Juventus vs Milan", "pick": "Home Win + Over 1.5", "odds": "2.10"}
@@ -32,6 +33,7 @@ final_data = {
 
 with open('data.json', 'w') as f:
 json.dump(final_data, f, indent=4)
+
 print("Success: data.json created!")
 
 if __name__ == "__main__":
