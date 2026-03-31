@@ -1,21 +1,91 @@
 {
-    "last_updated": "2026-03-31 03:00",
+    "last_updated": "2026-03-31 03:28",
     "ten_day_runner": [
         {
             "day_number": 1,
-            "date": "Check back soon",
-            "match": "No live games found",
-            "pick": "-",
-            "status": "WAITING"
+            "date": "Wednesday, Apr 01",
+            "match": "Botafogo FR vs Mirassol FC",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
+        },
+        {
+            "day_number": 2,
+            "date": "Wednesday, Apr 01",
+            "match": "SC Internacional vs S\u00e3o Paulo FC",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
+        },
+        {
+            "day_number": 3,
+            "date": "Wednesday, Apr 01",
+            "match": "EC Bahia vs CA Paranaense",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
+        },
+        {
+            "day_number": 4,
+            "date": "Wednesday, Apr 01",
+            "match": "Cruzeiro EC vs EC Vit\u00f3ria",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
+        },
+        {
+            "day_number": 5,
+            "date": "Wednesday, Apr 01",
+            "match": "Coritiba FBC vs CR Vasco da Gama",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
+        },
+        {
+            "day_number": 6,
+            "date": "Thursday, Apr 02",
+            "match": "Fluminense FC vs SC Corinthians Paulista",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
+        },
+        {
+            "day_number": 7,
+            "date": "Thursday, Apr 02",
+            "match": "Chapecoense AF vs CA Mineiro",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
+        },
+        {
+            "day_number": 8,
+            "date": "Thursday, Apr 02",
+            "match": "Santos FC vs Clube do Remo",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
+        },
+        {
+            "day_number": 9,
+            "date": "Friday, Apr 03",
+            "match": "RB Bragantino vs CR Flamengo",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
+        },
+        {
+            "day_number": 10,
+            "date": "Friday, Apr 03",
+            "match": "SE Palmeiras vs Gr\u00eamio FBPA",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
         }
     ],
     "daily_slips": [
         {
             "day_number": 1,
-            "date": "Check back soon",
-            "match": "No live games found",
-            "pick": "-",
-            "status": "WAITING"
+            "date": "Wednesday, Apr 01",
+            "match": "Botafogo FR vs Mirassol FC",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
+        },
+        {
+            "day_number": 2,
+            "date": "Wednesday, Apr 01",
+            "match": "SC Internacional vs S\u00e3o Paulo FC",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
         }
     ]
 }
