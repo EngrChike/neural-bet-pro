@@ -1,34 +1,40 @@
 import json
 import datetime
 import random
+
 def start_engine():
 # Everything below this must have 4 spaces on the left!
-start_date = datetime.datetime.now()
-teams = [&quot;Bayern&quot;, &quot;Real Madrid&quot;, &quot;Man City&quot;, &quot;Liverpool&quot;, &quot;Napoli&quot;, &quot;Dortmund&quot;, &quot;Barcelona&quot;,
-&quot;Inter&quot;, &quot;PSG&quot;, &quot;Ajax&quot;]
+    start_date = datetime.datetime.now()
+teams = ["Bayern", "Real Madrid", "Man City", "Liverpool", "Napoli", "Dortmund", "Barcelona", "Inter", "PSG", "Ajax"]
+
 # 1. Generate the 10-Day Roadmap
 roadmap = []
 for i in range(10):
-day_date = start_date + datetime.timedelta(days=i)
-roadmap.append({
-&quot;day_number&quot;: i + 1,
-&quot;date&quot;: day_date.strftime(&quot;%A, %b %d&quot;),
-&quot;match&quot;: f&quot;{teams[i]} vs {random.choice(teams)}&quot;,
-&quot;pick&quot;: &quot;Over 2.5 Goals&quot;,
-&quot;status&quot;: &quot;LOCKED&quot;
-})
+    day_date = start_date + datetime.timedelta(days=i)
+    roadmap.append({
+        "day_number": i + 1,
+        "date": day_date.strftime("%A, %b %d"),
+        "match": f"{teams[i]} vs {random.choice(teams)}",
+        "pick": "Over 2.5 Goals",
+        "status": "LOCKED"
+    })
+
 # 2. Generate Daily Slips
 slips = [
-{&quot;match&quot;: &quot;Arsenal vs Chelsea&quot;, &quot;pick&quot;: &quot;GG + Over 2.5&quot;, &quot;odds&quot;: &quot;2.40&quot;},
-{&quot;match&quot;: &quot;Juventus vs Milan&quot;, &quot;pick&quot;: &quot;Home Win + Over 1.5&quot;, &quot;odds&quot;: &quot;2.10&quot;}
-]
+    {"match": "Arsenal vs Chelsea", "pick": "GG + Over 2.5", "odds": "2.40"},
+    {"match": "Juventus vs Milan", "pick": "Home Win + Over 1.5", "odds": "2.10"}
+    ]
+
 final_data = {
-&quot;last_updated&quot;: start_date.strftime(&quot;%Y-%m-%d %H:%M&quot;),
-&quot;ten_day_runner&quot;: roadmap,
-&quot;daily_slips&quot;: slips
+    "last_updated": start_date.strftime("%Y-%m-%d %H:%M"),
+    "ten_day_runner": roadmap,
+    "daily_slips": slips
 }
-with open(&#39;data.json&#39;, &#39;w&#39;) as f:
-json.dump(final_data, f, indent=4)
-print(&quot;Success: data.json created!&quot;)
-if __name__ == &quot;__main__&quot;:
+
+with open('data.json', 'w') as f:
+    json.dump(final_data, f, indent=4)
+
+    print("Success: data.json created!")
+
+if __name__ == "__main__":
 start_engine()
