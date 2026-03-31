@@ -1,60 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>NEURAL-BET | AI Predictor</title>
-<style>
-:root { --blue: #00d4ff; --green: #39ff14; --gold: #f59e0b; --bg: #0a0b10; }
-body { background: var(--bg); color: #e2e8f0; font-family: sans-serif; padding: 20px; }
-.card { background: rgba(255,255,255,0.05); border: 1px solid #334; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-th { text-align: left; color: #94a3b8; border-bottom: 1px solid #334; padding: 10px; }
-td { padding: 12px 10px; border-bottom: 1px solid #222; }
-.today-row { background: rgba(245, 158, 11, 0.2); border: 2px solid var(--gold); font-weight: bold; }
-.today-badge { background: var(--gold); color: black; padding: 2px 6px; border-radius: 4px; font-size: 0.7em; margin-right: 5px; }
-.odds-badge { background: var(--blue); color: black; padding: 4px 8px; border-radius: 4px; font-weight: bold; float: right; }
-</style>
+    <meta charset="UTF-8">
+    <title>NEURAL-BET | Monthly Tracker</title>
+    <style>
+        :root { --blue: #00d4ff; --green: #39ff14; --red: #ff4444; --bg: #0a0b10; --card: #161b22; }
+        body { background: var(--bg); color: #e2e8f0; font-family: 'Segoe UI', sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+        
+        /* Stats Dashboard */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #30363d; text-align: center; }
+        .stat-value { font-size: 1.5rem; font-weight: bold; margin-top: 5px; }
+        .month-label { color: var(--blue); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 12px; text-align: center; border-radius: 8px; cursor: pointer; background: #21262d; border: 1px solid #30363d; }
+        .tab.active { background: var(--blue); color: black; font-weight: bold; }
+
+        .card { background: var(--card); border: 1px solid #30363d; border-radius: 12px; padding: 15px; }
+        table { width: 100%; border-collapse: collapse; }
+        td { padding: 12px 5px; border-bottom: 1px solid #21262d; }
+        
+        .badge { padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.7rem; }
+        .win-bg { background: rgba(57, 255, 20, 0.2); color: var(--green); }
+        .loss-bg { background: rgba(255, 68, 68, 0.2); color: var(--red); }
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
-<div style="display: flex; justify-content: space-between;">
-<h1>NEURAL-BET <small id="last-update" style="font-size:0.4em; color:var(--blue)"></small></h1>
-<div style="background:var(--green); color:black; padding:10px; border-radius:10px; font-weight:bold;">95% ACCURACY</div>
-</div>
 
-<div id="slips-container"></div>
+    <h2 id="month-display" style="margin-bottom: 5px;">MONTHLY PERFORMANCE</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="month-label">Wins This Month</div>
+            <div id="stat-wins" class="stat-value" style="color: var(--green);">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="month-label">Losses This Month</div>
+            <div id="stat-losses" class="stat-value" style="color: var(--red);">0</div>
+        </div>
+    </div>
 
-<div class="card">
-<h2 style="color: var(--gold);">10-DAY ROADMAP (OVER 2.5)</h2>
-<table>
-<thead><tr><th>DAY</th><th>MATCH</th><th align="right">STATUS</th></tr></thead>
-<tbody id="roadmap-body"></tbody>
-</table>
-</div>
+    <div class="tab-container">
+        <div id="t-live" class="tab active" onclick="switchTab('live')">FUTURE TIPS</div>
+        <div id="t-hist" class="tab" onclick="switchTab('hist')">HISTORY</div>
+    </div>
 
-<script>
-fetch('data.json').then(res => res.json()).then(data => {
-document.getElementById('last-update').innerText = "SYNCED: " + data.last_updated;
+    <div id="s-live" class="card">
+        <table id="table-live"></table>
+    </div>
 
-// Render 10-Day Roadmap
-const todayStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
-let roadmapHtml = '';
-data.ten_day_runner.forEach(g => {
-const isToday = g.date.includes(todayStr);
-roadmapHtml += `<tr class="${isToday ? 'today-row' : ''}">
-<td>${g.day_number}</td>
-<td>${isToday ? '<span class="today-badge">TODAY</span>' : ''}${g.match}<br><small>${g.date}</small></td>
-<td align="right">${isToday ? 'ACTIVE' : 'LOCKED'}</td>
-</tr>`;
-});
-document.getElementById('roadmap-body').innerHTML = roadmapHtml;
+    <div id="s-hist" class="card hidden">
+        <table id="table-hist"></table>
+    </div>
 
-// Render 5-Odd Slips
-let slipHtml = '';
-data.daily_slips.forEach(s => {
-slipHtml += `<div class="card"><span class="odds-badge">ODDS ${s.odds}</span><h3>${s.match}</h3><p style="color:var(--green)">PICK: ${s.pick}</p></div>`;
-});
-document.getElementById('slips-container').innerHTML = slipHtml;
-});
-</script>
+    <script>
+        function switchTab(t) {
+            document.getElementById('s-live').classList.toggle('hidden', t !== 'live');
+            document.getElementById('s-hist').classList.toggle('hidden', t !== 'hist');
+            document.getElementById('t-live').classList.toggle('active', t === 'live');
+            document.getElementById('t-hist').classList.toggle('active', t === 'hist');
+        }
+
+        fetch('data.json').then(r => r.json()).then(data => {
+            // Update Stats
+            document.getElementById('month-display').innerText = data.current_month;
+            document.getElementById('stat-wins').innerText = data.monthly_stats.wins;
+            document.getElementById('stat-losses').innerText = data.monthly_stats.losses;
+
+            // Load Future
+            let liveHtml = '';
+            data.ten_day_runner.forEach(g => {
+                liveHtml += `<tr><td><b>${g.date}</b></td><td>${g.match}</td><td align="right" style="color:var(--blue)">${g.pick}</td></tr>`;
+            });
+            document.getElementById('table-live').innerHTML = liveHtml;
+
+            // Load History
+            let histHtml = '';
+            data.history.forEach(h => {
+                const cls = h.result === 'WIN' ? 'win-bg' : 'loss-bg';
+                histHtml += `<tr><td>${h.date}</td><td>${h.match}</td><td align="right"><span class="badge ${cls}">${h.result}</span></td></tr>`;
+            });
+            document.getElementById('table-hist').innerHTML = histHtml;
+        });
+    </script>
 </body>
 </html>
