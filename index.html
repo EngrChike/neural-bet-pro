@@ -2,62 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEURAL-BET ELITE</title>
+    <title>NEURAL-BET | AI Predictor</title>
     <style>
-        :root { --blue: #00d4ff; --gold: #f59e0b; --bg: #05070a; --card: #11141d; --green: #39ff14; }
-        body { background: var(--bg); color: #e2e8f0; font-family: 'Segoe UI', sans-serif; padding: 15px; max-width: 500px; margin: auto; }
-        
-        .stat-bar { display: flex; justify-content: space-between; background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #222; margin-bottom: 15px; }
-        .scout-card { background: rgba(0, 212, 255, 0.1); border: 1px solid var(--blue); padding: 12px; border-radius: 10px; margin-bottom: 20px; font-size: 0.85rem; }
-        
-        .slip-box { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 4px solid var(--gold); }
-        .slip-title { color: var(--gold); font-weight: bold; margin-bottom: 10px; display: flex; justify-content: space-between; }
-        
-        .road-item { background: #161b22; padding: 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; font-size: 0.9rem; }
+        :root { --blue: #00d4ff; --green: #39ff14; --gold: #f59e0b; --bg: #0a0b10; }
+        body { background: var(--bg); color: #e2e8f0; font-family: sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+        .card { background: rgba(255,255,255,0.05); border: 1px solid #334; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { text-align: left; color: #94a3b8; border-bottom: 1px solid #334; padding: 10px; }
+        td { padding: 12px 10px; border-bottom: 1px solid #222; }
+        .today-row { background: rgba(245, 158, 11, 0.2); border: 2px solid var(--gold); font-weight: bold; }
+        .today-badge { background: var(--gold); color: black; padding: 2px 6px; border-radius: 4px; font-size: 0.7em; margin-right: 5px; }
+        .odds-badge { background: var(--blue); color: black; padding: 4px 8px; border-radius: 4px; font-weight: bold; float: right; }
+        .stat-box { background: var(--green); color: black; padding: 10px; border-radius: 10px; font-weight: bold; text-align: center; line-height: 1.2; }
     </style>
 </head>
 <body>
-
-    <div class="stat-bar">
-        <div><small id="m-name">MONTH</small><br><b style="color:var(--blue)">PERFORMANCE</b></div>
-        <div style="text-align:right"><b style="color:var(--green)" id="w-count">0</b> <small>W</small> | <b style="color:red" id="l-count">0</b> <small>L</small></div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1>NEURAL-BET <br><small id="last-update" style="font-size:0.3em; color:var(--blue)"></small></h1>
+        <div class="stat-box">
+            <span id="month-name" style="font-size: 0.7em;">MONTH</span><br>
+            <span id="win-count">0</span>W - <span id="loss-count">0</span>L
+        </div>
     </div>
 
-    <div class="scout-card">
-        <b style="color:var(--blue)">NEURAL SCOUT:</b> <span id="scout-report">Analyzing...</span>
-    </div>
+    <div id="slips-container"></div>
 
-    <div class="slip-box">
-        <div class="slip-title">MORNING 5-ODD (AM) <span>5.60 Odds</span></div>
-        <div id="am-content"></div>
+    <div class="card">
+        <h2 style="color: var(--gold);">10-DAY ROADMAP (OVER 2.5)</h2>
+        <table>
+            <thead><tr><th>DAY</th><th>MATCH</th><th align="right">STATUS</th></tr></thead>
+            <tbody id="roadmap-body"></tbody>
+        </table>
     </div>
-
-    <div class="slip-box" style="border-left-color: var(--blue);">
-        <div class="slip-title" style="color:var(--blue)">EVENING 5-ODD (PM) <span>5.15 Odds</span></div>
-        <div id="pm-content"></div>
-    </div>
-
-    <h4 style="color:var(--blue); border-bottom: 1px solid #222; padding-bottom: 5px;">10-DAY ROADMAP (95% ACCURACY)</h4>
-    <div id="roadmap-content"></div>
 
     <script>
-        fetch('data.json').then(r => r.json()).then(data => {
-            document.getElementById('m-name').innerText = data.current_month;
-            document.getElementById('w-count').innerText = data.monthly_stats.wins;
-            document.getElementById('l-count').innerText = data.monthly_stats.losses;
-            document.getElementById('scout-report').innerText = `${data.scout.tactic} | Form: ${data.scout.form} | ${data.scout.scout_note}`;
+        fetch('data.json').then(res => res.json()).then(data => {
+            document.getElementById('last-update').innerText = "SYNCED: " + data.last_updated;
+            document.getElementById('month-name').innerText = data.current_month.toUpperCase();
+            document.getElementById('win-count').innerText = data.monthly_stats.wins;
+            document.getElementById('loss-count').innerText = data.monthly_stats.losses;
 
-            let amH = ''; data.am_slip.forEach(g => amH += `<div style="margin-bottom:4px;">${g.match} ➔ <b>${g.pick}</b></div>`);
-            document.getElementById('am-content').innerHTML = amH;
-
-            let pmH = ''; data.pm_slip.forEach(g => pmH += `<div style="margin-bottom:4px;">${g.match} ➔ <b>${g.pick}</b></div>`);
-            document.getElementById('pm-content').innerHTML = pmH;
-
-            let roadH = ''; data.ten_day_runner.forEach(g => {
-                roadH += `<div class="road-item"><span>${g.date}</span><b>${g.match}</b><span style="color:var(--blue)">${g.pick}</span></div>`;
+            // Render 10-Day Roadmap
+            const todayStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+            let roadmapHtml = '';
+            data.ten_day_runner.forEach(g => {
+                const isToday = g.date.includes(todayStr);
+                roadmapHtml += `<tr class="${isToday ? 'today-row' : ''}">
+                    <td>${g.day_number}</td>
+                    <td>${isToday ? '<span class="today-badge">TODAY</span>' : ''}${g.match}<br><small>${g.date}</small></td>
+                    <td align="right">${isToday ? 'ACTIVE' : 'LOCKED'}</td>
+                </tr>`;
             });
-            document.getElementById('roadmap-content').innerHTML = roadH;
+            document.getElementById('roadmap-body').innerHTML = roadmapHtml;
+
+            // Render 5-Odd Slips (AM/PM)
+            let slipHtml = '';
+            data.daily_slips.forEach(s => {
+                slipHtml += `<div class="card"><span class="odds-badge">ODDS ${s.odds}</span><h3>${s.match}</h3><p style="color:var(--green)">NEURAL PICK: ${s.pick}</p></div>`;
+            });
+            document.getElementById('slips-container').innerHTML = slipHtml;
         });
     </script>
 </body>
