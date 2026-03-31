@@ -2,87 +2,106 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>NEURAL-BET | Monthly Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEURAL-BET PRO</title>
     <style>
-        :root { --blue: #00d4ff; --green: #39ff14; --red: #ff4444; --bg: #0a0b10; --card: #161b22; }
-        body { background: var(--bg); color: #e2e8f0; font-family: 'Segoe UI', sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+        :root { --blue: #00d4ff; --green: #39ff14; --red: #ff4444; --bg: #0d1117; --card: #161b22; --border: #30363d; }
+        body { background: var(--bg); color: #c9d1d9; font-family: sans-serif; padding: 15px; max-width: 600px; margin: auto; }
         
-        /* Stats Dashboard */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #30363d; text-align: center; }
-        .stat-value { font-size: 1.5rem; font-weight: bold; margin-top: 5px; }
-        .month-label { color: var(--blue); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        /* Monthly Stats Section */
+        .stats-header { display: flex; justify-content: space-between; align-items: center; background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
+        .stat-item { text-align: center; }
+        .stat-val { font-size: 1.2rem; font-weight: bold; }
 
-        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab { flex: 1; padding: 12px; text-align: center; border-radius: 8px; cursor: pointer; background: #21262d; border: 1px solid #30363d; }
-        .tab.active { background: var(--blue); color: black; font-weight: bold; }
+        /* 5-Odd Daily Slip Section */
+        .daily-box { background: linear-gradient(145deg, #1e2530, #161b22); border: 2px solid var(--blue); border-radius: 15px; padding: 15px; margin-bottom: 25px; box-shadow: 0 0 15px rgba(0,212,255,0.2); }
+        .daily-title { color: var(--blue); font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: flex; justify-content: space-between; }
 
-        .card { background: var(--card); border: 1px solid #30363d; border-radius: 12px; padding: 15px; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 15px; }
+        .tab-btn { flex: 1; padding: 10px; border: none; background: var(--card); color: #8b949e; cursor: pointer; border-radius: 8px; border: 1px solid var(--border); }
+        .tab-btn.active { background: var(--blue); color: #000; font-weight: bold; }
+
+        .content-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
         table { width: 100%; border-collapse: collapse; }
-        td { padding: 12px 5px; border-bottom: 1px solid #21262d; }
-        
-        .badge { padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.7rem; }
-        .win-bg { background: rgba(57, 255, 20, 0.2); color: var(--green); }
-        .loss-bg { background: rgba(255, 68, 68, 0.2); color: var(--red); }
+        td { padding: 12px 8px; border-bottom: 1px solid #21262d; font-size: 0.9rem; }
+        .badge { padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 0.7rem; }
+        .win { background: rgba(57, 255, 20, 0.1); color: var(--green); border: 1px solid var(--green); }
+        .loss { background: rgba(255, 68, 68, 0.1); color: var(--red); border: 1px solid var(--red); }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
-    <h2 id="month-display" style="margin-bottom: 5px;">MONTHLY PERFORMANCE</h2>
-    
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="month-label">Wins This Month</div>
-            <div id="stat-wins" class="stat-value" style="color: var(--green);">0</div>
+    <div class="stats-header">
+        <div class="stat-item">
+            <div style="font-size:0.7rem; color:var(--blue)" id="month-label">MONTH</div>
+            <div class="stat-val">STATS</div>
         </div>
-        <div class="stat-card">
-            <div class="month-label">Losses This Month</div>
-            <div id="stat-losses" class="stat-value" style="color: var(--red);">0</div>
+        <div class="stat-item">
+            <div style="font-size:0.7rem; color:var(--green)">WINS</div>
+            <div id="wins" class="stat-val">0</div>
+        </div>
+        <div class="stat-item">
+            <div style="font-size:0.7rem; color:var(--red)">LOSS</div>
+            <div id="losses" class="stat-val">0</div>
         </div>
     </div>
 
-    <div class="tab-container">
-        <div id="t-live" class="tab active" onclick="switchTab('live')">FUTURE TIPS</div>
-        <div id="t-hist" class="tab" onclick="switchTab('hist')">HISTORY</div>
+    <div class="daily-box">
+        <div class="daily-title">
+            <span>🔥 DAILY 5-ODD SLIP</span>
+            <span style="color:#fff">TOTAL ODDS: 5.80</span>
+        </div>
+        <table id="daily-table" style="color:#f0f6fc"></table>
     </div>
 
-    <div id="s-live" class="card">
-        <table id="table-live"></table>
+    <div class="tabs">
+        <button id="btn-live" class="tab-btn active" onclick="showTab('live')">10-DAY ROADMAP</button>
+        <button id="btn-hist" class="tab-btn" onclick="showTab('hist')">HISTORY</button>
     </div>
 
-    <div id="s-hist" class="card hidden">
-        <table id="table-hist"></table>
+    <div id="view-live" class="content-card">
+        <table id="live-table"></table>
+    </div>
+
+    <div id="view-hist" class="content-card hidden">
+        <table id="hist-table"></table>
     </div>
 
     <script>
-        function switchTab(t) {
-            document.getElementById('s-live').classList.toggle('hidden', t !== 'live');
-            document.getElementById('s-hist').classList.toggle('hidden', t !== 'hist');
-            document.getElementById('t-live').classList.toggle('active', t === 'live');
-            document.getElementById('t-hist').classList.toggle('active', t === 'hist');
+        function showTab(view) {
+            document.getElementById('view-live').classList.toggle('hidden', view !== 'live');
+            document.getElementById('view-hist').classList.toggle('hidden', view !== 'hist');
+            document.getElementById('btn-live').classList.toggle('active', view === 'live');
+            document.getElementById('btn-hist').classList.toggle('active', view === 'hist');
         }
 
         fetch('data.json').then(r => r.json()).then(data => {
-            // Update Stats
-            document.getElementById('month-display').innerText = data.current_month;
-            document.getElementById('stat-wins').innerText = data.monthly_stats.wins;
-            document.getElementById('stat-losses').innerText = data.monthly_stats.losses;
+            document.getElementById('month-label').innerText = data.current_month;
+            document.getElementById('wins').innerText = data.monthly_stats.wins;
+            document.getElementById('losses').innerText = data.monthly_stats.losses;
 
-            // Load Future
+            // Daily 5-Odd
+            let dailyHtml = '';
+            data.daily_5_odd.forEach(item => {
+                dailyHtml += `<tr><td>${item.match}</td><td style="color:var(--green)">${item.pick}</td><td align="right">${item.odds}</td></tr>`;
+            });
+            document.getElementById('daily-table').innerHTML = dailyHtml;
+
+            // 10-Day Roadmap
             let liveHtml = '';
-            data.ten_day_runner.forEach(g => {
-                liveHtml += `<tr><td><b>${g.date}</b></td><td>${g.match}</td><td align="right" style="color:var(--blue)">${g.pick}</td></tr>`;
+            data.ten_day_runner.forEach(row => {
+                liveHtml += `<tr><td style="color:#8b949e">${row.date}</td><td>${row.match}</td><td align="right" style="color:var(--blue)">${row.pick}</td></tr>`;
             });
-            document.getElementById('table-live').innerHTML = liveHtml;
+            document.getElementById('live-table').innerHTML = liveHtml;
 
-            // Load History
+            // History
             let histHtml = '';
-            data.history.forEach(h => {
-                const cls = h.result === 'WIN' ? 'win-bg' : 'loss-bg';
-                histHtml += `<tr><td>${h.date}</td><td>${h.match}</td><td align="right"><span class="badge ${cls}">${h.result}</span></td></tr>`;
+            data.history.forEach(row => {
+                const badge = row.result === 'WIN' ? 'win' : 'loss';
+                histHtml += `<tr><td>${row.date}</td><td>${row.match}</td><td align="right"><span class="badge ${badge}">${row.result}</span></td></tr>`;
             });
-            document.getElementById('table-hist').innerHTML = histHtml;
+            document.getElementById('hist-table').innerHTML = histHtml;
         });
     </script>
 </body>
