@@ -10,7 +10,7 @@ teams = ["Bayern", "Real Madrid", "Man City", "Liverpool", "Napoli", "Dortmund",
 # 1. Generate the 10-Day Roadmap
 roadmap = []
 for i in range(10):
-day_date = start_date + datetime.timedelta(days=i)
+    day_date = start_date + datetime.timedelta(days=i)
 roadmap.append({
 "day_number": i + 1,
 "date": day_date.strftime("%A, %b %d"),
