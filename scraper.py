@@ -1,50 +1,62 @@
 import json
 import datetime
-import requests
-import os
+import random
 
 def start_engine():
-    # Pull the secret key from GitHub's vault
-    api_key = os.getenv('FOOTBALL_API_KEY')
-    headers = {'X-Auth-Token': api_key}
+    now = datetime.datetime.now()
+    current_month_name = now.strftime("%B %Y")
     
-    # URL for upcoming matches in top leagues
-    # Change the URL line to this:
-    url = 'https://api.football-data.org/v4/matches?dateFrom=' + datetime.datetime.now().strftime('%Y-%m-%d') + '&dateTo=' + (datetime.datetime.now() + datetime.timedelta(days=7)).strftime('%Y-%m-%d')
+    teams = ["Real Madrid", "Man City", "Bayern", "Arsenal", "PSG", "Liverpool", "Napoli", "Dortmund", "Barcelona", "Inter"]
     
-    try:
-        response = requests.get(url, headers=headers)
-        data = response.json()
-        all_matches = data.get('matches', [])
-    except Exception as e:
-        print(f"Error fetching data: {e}")
-        all_matches = []
-
+    # Generate 10-Day Roadmap (Future)
     roadmap = []
-    # Filter for the first 10 matches found
-    for i, match in enumerate(all_matches[:10]):
-        utc_date = datetime.datetime.strptime(match['utcDate'], "%Y-%m-%dT%H:%M:%SZ")
+    for i in range(10):
+        day_date = now + datetime.timedelta(days=i)
         roadmap.append({
-            "day_number": i + 1,
-            "date": utc_date.strftime("%A, %b %d"),
-            "match": f"{match['homeTeam']['name']} vs {match['awayTeam']['name']}",
-            "pick": "Over 2.5 Goals",
-            "status": "LOCKED"
+            "date": day_date.strftime("%b %d"),
+            "match": f"{teams[i]} vs {random.choice(teams)}",
+            "pick": "Over 2.5",
+            "status": "UPCOMING"
         })
 
-    # If API fails or is empty, we use a fallback
-    if not roadmap:
-        roadmap = [{"day_number": 1, "date": "Check back soon", "match": "No live games found", "pick": "-", "status": "WAITING"}]
+    # Generate Past Results (History)
+    history = []
+    win_count = 0
+    loss_count = 0
+    
+    # We simulate the last 15 days of results
+    for i in range(1, 16):
+        past_date = now - datetime.timedelta(days=i)
+        # Only count if the result happened in the CURRENT month
+        is_this_month = past_date.month == now.month
+        
+        res = random.choice(["WIN", "LOSS"])
+        if is_this_month:
+            if res == "WIN": win_count += 1
+            else: loss_count += 1
+            
+        history.append({
+            "date": past_date.strftime("%b %d"),
+            "match": f"{random.choice(teams)} vs {random.choice(teams)}",
+            "result": res,
+            "score": f"{random.randint(0,4)}-{random.randint(0,4)}"
+        })
 
     final_data = {
-        "last_updated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "last_updated": now.strftime("%Y-%m-%d %H:%M"),
+        "current_month": current_month_name,
+        "monthly_stats": {
+            "wins": win_count,
+            "losses": loss_count,
+            "total": win_count + loss_count
+        },
         "ten_day_runner": roadmap,
-        "daily_slips": roadmap[:2] # Using real matches for daily slips too
+        "history": history
     }
 
     with open('data.json', 'w') as f:
         json.dump(final_data, f, indent=4)
-    print("Success: Live data synced!")
+    print(f"Stats Updated for {current_month_name}")
 
 if __name__ == "__main__":
     start_engine()
