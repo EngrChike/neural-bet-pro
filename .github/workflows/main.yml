@@ -3,19 +3,26 @@ on:
   schedule:
     - cron: '0 6,18 * * *'
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
       - name: Run AI Script
         run: python scraper.py
       - name: Deploy Data
         run: |
           git config --global 
-user.name "AI-Bot"
+          user.name &quot;AI-Bot&quot;
           git config --global 
-user.email "bot@github.com"
+          user.email &quot;bot@github.com&quot;
           git add data.json
-          git commit -m "Update"
+          git commit -m &quot;Auto-update predictions&quot; || exit 0
           git push
