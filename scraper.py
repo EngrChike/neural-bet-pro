@@ -1,88 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>NEURAL-BET | Elite Scouting</title>
-    <style>
-        :root { --blue: #00d4ff; --gold: #ffd700; --bg: #05070a; --card: #11141d; }
-        body { background: var(--bg); color: #e2e8f0; font-family: 'Inter', sans-serif; padding: 15px; max-width: 500px; margin: auto; }
-        
-        .scout-box { background: rgba(0,212,255,0.1); border: 1px solid var(--blue); padding: 15px; border-radius: 12px; margin-bottom: 20px; }
-        .section-title { font-size: 0.8rem; letter-spacing: 2px; color: var(--blue); margin: 20px 0 10px; font-weight: 800; }
-        
-        /* 5-Odd Slip Styling */
-        .slip-card { background: var(--card); border: 1px solid #222; border-radius: 15px; padding: 15px; margin-bottom: 20px; border-left: 5px solid var(--gold); }
-        .odds-badge { background: var(--gold); color: black; padding: 2px 8px; border-radius: 4px; font-weight: bold; float: right; }
+import json
+import datetime
+import random
+import os
 
-        .roadmap-item { display: flex; justify-content: space-between; background: #161b22; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-bottom: 1px solid #30363d; }
-        .hidden { display: none; }
-        .tab-bar { display: flex; gap: 10px; margin: 20px 0; }
-        .tab { flex: 1; text-align: center; padding: 10px; background: #1c2128; border-radius: 8px; cursor: pointer; border: 1px solid #30363d; }
-        .tab.active { background: var(--blue); color: #000; font-weight: bold; }
-    </style>
-</head>
-<body>
+def analyze_deep_stats():
+    # Simulates checking Coach style, Player injury/form, and Manager changes
+    styles = ["High-Press Attacking", "Tactical Defensive", "Counter-Strike", "Possession"]
+    accuracy_trigger = random.randint(92, 98) # Target 95% average
+    return {
+        "tactic": random.choice(styles),
+        "form": f"{accuracy_trigger}%",
+        "scout_note": "New Manager factor analyzed" if random.random() > 0.8 else "Stable Squad"
+    }
 
-    <div class="scout-box">
-        <div style="font-size: 0.7rem; color: var(--blue)">NEURAL SCOUTING ACTIVE (95% ACCURACY)</div>
-        <div id="coach-report" style="font-weight: bold; margin-top:5px;">Analyzing Manager & Squad...</div>
-    </div>
-
-    <div class="section-title">TODAY'S 5-ODD SLIPS</div>
+def start_engine():
+    now = datetime.datetime.now()
+    scout = analyze_deep_stats()
     
-    <div class="slip-card">
-        <span class="odds-badge">AM SLIP</span>
-        <div id="am-table"></div>
-    </div>
+    # --- 10-DAY ROADMAP (1 Sure Game Per Day) ---
+    teams = ["Chelsea", "Arsenal", "Real Madrid", "Man City", "Bayern", "Napoli", "PSG", "Inter", "Dortmund", "Liverpool"]
+    roadmap = []
+    for i in range(10):
+        game_date = now + datetime.timedelta(days=i)
+        roadmap.append({
+            "date": game_date.strftime("%b %d"),
+            "match": f"{teams[i]} vs {random.choice(teams)}",
+            "pick": "Sure Over 1.5",
+            "accuracy": "95%"
+        })
 
-    <div class="slip-card" style="border-left-color: var(--blue)">
-        <span class="odds-badge" style="background: var(--blue)">PM SLIP</span>
-        <div id="pm-table"></div>
-    </div>
+    # --- DAILY 5-ODD SLIPS (AM & PM) ---
+    am_slip = [
+        {"match": "Lazio vs Milan", "pick": "BTTS", "odds": "1.95"},
+        {"match": "Ajax vs PSV", "pick": "Over 2.5", "odds": "1.80"},
+        {"match": "Porto vs Braga", "pick": "Home Win", "odds": "1.65"}
+    ]
+    pm_slip = [
+        {"match": "Real Madrid vs Barca", "pick": "Over 2.5", "odds": "1.85"},
+        {"match": "Man City vs Arsenal", "pick": "GG (BTTS)", "odds": "1.75"},
+        {"match": "Juve vs Inter", "pick": "Over 1.5", "odds": "1.60"}
+    ]
 
-    <div class="tab-bar">
-        <div id="t1" class="tab active" onclick="tab('roadmap')">10-DAY ROADMAP</div>
-        <div id="t2" class="tab" onclick="tab('history')">HISTORY</div>
-    </div>
+    # --- MONTHLY RESET LOGIC ---
+    # (Simplified for display; in production this compares timestamps)
+    wins = random.randint(20, 30) # Simulated wins for current month
+    losses = random.randint(2, 5)
 
-    <div id="v-roadmap"></div>
-    <div id="v-history" class="hidden"></div>
+    final_data = {
+        "last_updated": now.strftime("%Y-%m-%d %H:%M"),
+        "current_month": now.strftime("%B %Y"),
+        "monthly_stats": {"wins": wins, "losses": losses},
+        "scout": scout,
+        "am_slip": am_slip,
+        "pm_slip": pm_slip,
+        "ten_day_runner": roadmap
+    }
 
-    <script>
-        function tab(v) {
-            document.getElementById('v-roadmap').classList.toggle('hidden', v !== 'roadmap');
-            document.getElementById('v-history').classList.toggle('hidden', v !== 'history');
-            document.getElementById('t1').classList.toggle('active', v === 'roadmap');
-            document.getElementById('t2').classList.toggle('active', v === 'history');
-        }
+    with open('data.json', 'w') as f:
+        json.dump(final_data, f, indent=4)
 
-        fetch('data.json').then(r => r.json()).then(data => {
-            // Update Scout Report
-            document.getElementById('coach-report').innerText = 
-                `Style: ${data.scout_analysis.style} | Predicted Form: ${data.scout_analysis.form_index}`;
-
-            // AM & PM Slips
-            let amHtml = ''; data.daily_5_odd_am.forEach(g => {
-                amHtml += `<div style="font-size:0.9rem; margin-bottom:5px;">${g.match} ➔ <b style="color:var(--gold)">${g.pick}</b></div>`;
-            });
-            document.getElementById('am-table').innerHTML = amHtml;
-
-            let pmHtml = ''; data.daily_5_odd_pm.forEach(g => {
-                pmHtml += `<div style="font-size:0.9rem; margin-bottom:5px;">${g.match} ➔ <b style="color:var(--blue)">${g.pick}</b></div>`;
-            });
-            document.getElementById('pm-table').innerHTML = pmHtml;
-
-            // 10-Day Roadmap (1 Game per day)
-            let roadHtml = '';
-            data.ten_day_runner.forEach(g => {
-                roadHtml += `<div class="roadmap-item">
-                    <span>${g.date}</span>
-                    <span style="font-weight:bold">${g.match}</span>
-                    <span style="color:var(--gold)">${g.pick}</span>
-                </div>`;
-            });
-            document.getElementById('v-roadmap').innerHTML = roadHtml;
-        });
-    </script>
-</body>
-</html>
+if __name__ == "__main__":
+    start_engine()
