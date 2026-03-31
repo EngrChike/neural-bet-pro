@@ -34,4 +34,4 @@ with open('data.json', 'w') as f:
 json.dump(final_data, f, indent=4)
 
 if __name__ == "__main__":
-generate_data(
+generate_data()
