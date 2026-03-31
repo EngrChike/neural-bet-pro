@@ -1,87 +1,21 @@
 {
-    "last_updated": "2026-03-31 02:05",
+    "last_updated": "2026-03-31 03:00",
     "ten_day_runner": [
         {
             "day_number": 1,
-            "date": "Tuesday, Mar 31",
-            "match": "Bayern vs Liverpool",
-            "pick": "Over 2.5 Goals",
-            "status": "LOCKED"
-        },
-        {
-            "day_number": 2,
-            "date": "Wednesday, Apr 01",
-            "match": "Real Madrid vs Dortmund",
-            "pick": "Over 2.5 Goals",
-            "status": "LOCKED"
-        },
-        {
-            "day_number": 3,
-            "date": "Thursday, Apr 02",
-            "match": "Man City vs Inter",
-            "pick": "Over 2.5 Goals",
-            "status": "LOCKED"
-        },
-        {
-            "day_number": 4,
-            "date": "Friday, Apr 03",
-            "match": "Liverpool vs Dortmund",
-            "pick": "Over 2.5 Goals",
-            "status": "LOCKED"
-        },
-        {
-            "day_number": 5,
-            "date": "Saturday, Apr 04",
-            "match": "Napoli vs Real Madrid",
-            "pick": "Over 2.5 Goals",
-            "status": "LOCKED"
-        },
-        {
-            "day_number": 6,
-            "date": "Sunday, Apr 05",
-            "match": "Dortmund vs Inter",
-            "pick": "Over 2.5 Goals",
-            "status": "LOCKED"
-        },
-        {
-            "day_number": 7,
-            "date": "Monday, Apr 06",
-            "match": "Barcelona vs Ajax",
-            "pick": "Over 2.5 Goals",
-            "status": "LOCKED"
-        },
-        {
-            "day_number": 8,
-            "date": "Tuesday, Apr 07",
-            "match": "Inter vs Liverpool",
-            "pick": "Over 2.5 Goals",
-            "status": "LOCKED"
-        },
-        {
-            "day_number": 9,
-            "date": "Wednesday, Apr 08",
-            "match": "PSG vs Inter",
-            "pick": "Over 2.5 Goals",
-            "status": "LOCKED"
-        },
-        {
-            "day_number": 10,
-            "date": "Thursday, Apr 09",
-            "match": "Ajax vs Dortmund",
-            "pick": "Over 2.5 Goals",
-            "status": "LOCKED"
+            "date": "Check back soon",
+            "match": "No live games found",
+            "pick": "-",
+            "status": "WAITING"
         }
     ],
     "daily_slips": [
         {
-            "match": "Arsenal vs Chelsea",
-            "pick": "GG + Over 2.5",
-            "odds": "2.40"
-        },
-        {
-            "match": "Juventus vs Milan",
-            "pick": "Home Win + Over 1.5",
-            "odds": "2.10"
+            "day_number": 1,
+            "date": "Check back soon",
+            "match": "No live games found",
+            "pick": "-",
+            "status": "WAITING"
         }
     ]
 }
