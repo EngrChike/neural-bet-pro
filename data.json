@@ -1,31 +1,31 @@
 {
-    "last_updated": "2026-04-01 07:43",
+    "last_updated": "2026-04-01 19:12",
     "ten_day_runner": [
         {
             "day_number": 1,
-            "date": "Wednesday, Apr 01",
-            "match": "Botafogo FR vs Mirassol FC",
-            "pick": "Over 2.5 Goals",
-            "status": "LOCKED"
-        },
-        {
-            "day_number": 2,
             "date": "Wednesday, Apr 01",
             "match": "SC Internacional vs S\u00e3o Paulo FC",
             "pick": "Over 2.5 Goals",
             "status": "LOCKED"
         },
         {
+            "day_number": 2,
+            "date": "Wednesday, Apr 01",
+            "match": "Botafogo FR vs Mirassol FC",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
+        },
+        {
             "day_number": 3,
             "date": "Wednesday, Apr 01",
-            "match": "Cruzeiro EC vs EC Vit\u00f3ria",
+            "match": "EC Bahia vs CA Paranaense",
             "pick": "Over 2.5 Goals",
             "status": "LOCKED"
         },
         {
             "day_number": 4,
             "date": "Wednesday, Apr 01",
-            "match": "EC Bahia vs CA Paranaense",
+            "match": "Cruzeiro EC vs EC Vit\u00f3ria",
             "pick": "Over 2.5 Goals",
             "status": "LOCKED"
         },
@@ -41,14 +41,14 @@
         {
             "day_number": 1,
             "date": "Wednesday, Apr 01",
-            "match": "Botafogo FR vs Mirassol FC",
+            "match": "SC Internacional vs S\u00e3o Paulo FC",
             "pick": "Over 2.5 Goals",
             "status": "LOCKED"
         },
         {
             "day_number": 2,
             "date": "Wednesday, Apr 01",
-            "match": "SC Internacional vs S\u00e3o Paulo FC",
+            "match": "Botafogo FR vs Mirassol FC",
             "pick": "Over 2.5 Goals",
             "status": "LOCKED"
         }
