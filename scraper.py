@@ -1,49 +1,52 @@
 import json
 import datetime
-import random
+import requests
+import os
 
-# 1. Basic Setup
-now = datetime.datetime.now()
-current_month = now.strftime("%B %Y")
+def start_engine():
+    # Pull the secret key from GitHub's vault
+    api_key = os.getenv('FOOTBALL_API_KEY')
+    headers = {'X-Auth-Token': api_key}
+    
+    # URL for upcoming matches in top leagues
+    url = 'https://api.football-data.org/v4/matches'
+    
+    try:
+        response = requests.get(url, headers=headers)
+        data = response.json()
+        all_matches = data.get('matches', [])
+    except Exception as e:
+        print(f"Error fetching data: {e}")
+        all_matches = []
 
-# 2. Generate 10-Day Roadmap (1 Game Per Day)
-teams = ["Chelsea", "Arsenal", "Real Madrid", "Man City", "Bayern", "Napoli", "PSG", "Inter", "Dortmund", "Liverpool"]
-roadmap = []
-for i in range(10):
-    game_date = now + datetime.timedelta(days=i)
-    roadmap.append({
-        "date": game_date.strftime("%b %d"),
-        "match": f"{teams[i]} vs {random.choice(teams)}",
-        "pick": "Sure Over 1.5",
-        "status": "95% ACCURACY"
-    })
+    roadmap = []
+    # Filter for the first 10 matches found
+    for i, match in enumerate(all_matches[:10]):
+        utc_date = datetime.datetime.strptime(match['utcDate'], "%Y-%m-%dT%H:%M:%SZ")
+        roadmap.append({
+            "day_number": i + 1,
+            "date": utc_date.strftime("%A, %b %d"),
+            "match": f"{match['homeTeam']['name']} vs {match['awayTeam']['name']}",
+            "pick": "Over 2.5 Goals",
+            "status": "LOCKED"
+        })
 
-# 3. Generate 5-Odd Slips (Morning & Evening)
-am_slip = [
-    {"match": "Lazio vs Milan", "pick": "BTTS", "odds": "1.95"},
-    {"match": "Ajax vs PSV", "pick": "Over 2.5", "odds": "1.80"},
-    {"match": "Porto vs Braga", "pick": "Home Win", "odds": "1.65"}
-]
-pm_slip = [
-    {"match": "Real Madrid vs Barca", "pick": "Over 2.5", "odds": "1.85"},
-    {"match": "Man City vs Arsenal", "pick": "GG", "odds": "1.75"},
-    {"match": "Juve vs Inter", "pick": "Over 1.5", "odds": "1.60"}
-]
+    # If API fails or is empty, we use a fallback
+    if not roadmap:
+        roadmap = [{"day_number": 1, "date": "Check back soon", "match": "No live games found", "pick": "-", "status": "WAITING"}]
 
-# 4. Save to File
-final_data = {
-    "last_updated": now.strftime("%Y-%m-%d %H:%M"),
-    "current_month": current_month,
-    "monthly_stats": {"wins": 12, "losses": 2},
-    "scout": {"tactic": "Attacking High-Press", "form": "95%", "note": "Squad depth analyzed"},
-    "am_slip": am_slip,
-    "pm_slip": pm_slip,
-    "ten_day_runner": roadmap
-}
+    final_data = {
+        "last_updated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "ten_day_runner": roadmap,
+        "daily_slips": roadmap[:2] # Using real matches for daily slips too
+    }
 
-with open('data.json', 'w') as f:
-    json.dump(final_data, f, indent=4)
+    with open('data.json', 'w') as f:
+        json.dump(final_data, f, indent=4)
+    print("Success: Live data synced!")
 
-print("Data saved successfully!")
+if __name__ == "__main__":
+    start_engine()
+
 
 
