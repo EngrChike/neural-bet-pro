@@ -1,5 +1,5 @@
 {
-    "last_updated": "2026-04-02 07:22",
+    "last_updated": "2026-04-02 19:04",
     "ten_day_runner": [
         {
             "day_number": 1,
@@ -11,14 +11,14 @@
         {
             "day_number": 2,
             "date": "Thursday, Apr 02",
-            "match": "Santos FC vs Clube do Remo",
+            "match": "Chapecoense AF vs CA Mineiro",
             "pick": "Over 2.5 Goals",
             "status": "LOCKED"
         },
         {
             "day_number": 3,
             "date": "Thursday, Apr 02",
-            "match": "Chapecoense AF vs CA Mineiro",
+            "match": "Santos FC vs Clube do Remo",
             "pick": "Over 2.5 Goals",
             "status": "LOCKED"
         }
@@ -34,7 +34,7 @@
         {
             "day_number": 2,
             "date": "Thursday, Apr 02",
-            "match": "Santos FC vs Clube do Remo",
+            "match": "Chapecoense AF vs CA Mineiro",
             "pick": "Over 2.5 Goals",
             "status": "LOCKED"
         }
