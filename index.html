@@ -3,96 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEURAL-BET | Elite AI</title>
+    <title>NEURAL-BET | ELITE AI</title>
     <style>
-        :root { --neon-blue: #00f2ff; --neon-green: #39ff14; --neon-gold: #ffcc00; --dark-bg: #080a0c; --card-bg: #12161d; }
-        body { background: var(--dark-bg); color: #ffffff; font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 15px; }
-        
-        /* Header & Stats */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #222; margin-bottom: 20px; }
-        .logo { font-size: 1.5rem; font-weight: 900; letter-spacing: -1px; }
-        .logo span { color: var(--neon-blue); }
-        .stat-pill { background: var(--neon-green); color: #000; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; box-shadow: 0 0 10px rgba(57, 255, 20, 0.4); }
-
-        /* Slip Containers */
-        .section-label { color: var(--neon-blue); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin: 25px 0 10px; display: block; }
-        
-        .slip-card { background: var(--card-bg); border-radius: 16px; padding: 20px; margin-bottom: 15px; border: 1px solid #2a2f3a; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .slip-card::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
-        .am-card::before { background: var(--neon-gold); }
-        .pm-card::before { background: var(--neon-blue); }
-
-        .game-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e232d; }
-        .game-row:last-child { border: none; }
-        .match-name { font-weight: 600; font-size: 0.95rem; }
-        .pick-badge { background: rgba(57, 255, 20, 0.1); color: var(--neon-green); padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 0.75rem; border: 1px solid var(--neon-green); }
-
-        /* Roadmap Styling */
-        .roadmap-list { background: var(--card-bg); border-radius: 16px; border: 1px solid #2a2f3a; padding: 5px 15px; }
-        .road-item { display: grid; grid-template-columns: 60px 1fr 60px; padding: 15px 0; border-bottom: 1px solid #1e232d; align-items: center; }
-        .road-date { font-size: 0.75rem; color: #707785; }
-        .road-match { font-weight: 500; text-align: center; font-size: 0.85rem; }
-        .road-pick { color: var(--neon-gold); font-weight: 800; text-align: right; font-size: 0.8rem; }
+        :root { --blue: #00f2ff; --green: #39ff14; --gold: #ffcc00; --bg: #080a0c; --card: #12161d; }
+        body { background: var(--bg); color: #fff; font-family: sans-serif; padding: 15px; margin:0; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #222; }
+        .stat-pill { background: var(--green); color: #000; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; }
+        .section-title { color: var(--blue); font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; margin: 20px 0 10px; display: block; }
+        .card { background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #2a2f3a; }
+        .game-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1e232d; font-size: 0.9rem; }
+        .pick { color: var(--green); font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <div class="logo">NEURAL<span>-BET</span></div>
-        <div class="stat-pill" id="stats">WINS: 0 | LOSS: 0</div>
+        <div style="font-size: 1.5rem; font-weight: 900;">NEURAL<span style="color:var(--blue)">-BET</span></div>
+        <div class="stat-pill" id="stats">0W - 0L</div>
     </div>
 
-    <span class="section-label">Dual Slip Analysis</span>
-    
-    <div class="slip-card am-card">
-        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-            <b style="color:var(--neon-gold)">MORNING (AM) SLIP</b>
-            <small style="color:#707785">5.50+ ODDS</small>
-        </div>
-        <div id="am-list"></div>
+    <span class="section-title">TODAY'S 5-ODD SLIPS</span>
+    <div class="card" style="border-left: 4px solid var(--gold);">
+        <b style="color:var(--gold)">MORNING (AM)</b>
+        <div id="am-box">Loading Morning Games...</div>
     </div>
 
-    <div class="slip-card pm-card">
-        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-            <b style="color:var(--neon-blue)">EVENING (PM) SLIP</b>
-            <small style="color:#707785">5.20+ ODDS</small>
-        </div>
-        <div id="pm-list"></div>
+    <div class="card" style="border-left: 4px solid var(--blue);">
+        <b style="color:var(--blue)">EVENING (PM)</b>
+        <div id="pm-box">Loading Evening Games...</div>
     </div>
 
-    <span class="section-label">10-Day O2.5 Accumulator</span>
-    <div class="roadmap-list" id="roadmap-list"></div>
+    <span class="section-title">10-DAY ROADMAP (O2.5)</span>
+    <div class="card" id="road-box">Loading Roadmap...</div>
 
     <script>
-        // Adding a cache-buster to ensure fresh games every load
-        fetch('data.json?nocache=' + new Date().getTime())
+        // The '?v=' + Date.now() forces the browser to bypass the cache
+        fetch('data.json?v=' + Date.now())
         .then(r => r.json())
         .then(data => {
-            document.getElementById('stats').innerText = `WINS: ${data.monthly_stats.wins} | LOSSES: ${data.monthly_stats.losses}`;
+            document.getElementById('stats').innerText = data.monthly_stats.wins + "W - " + data.monthly_stats.losses + "L";
 
-            let amHtml = '';
-            data.am_slip.forEach(g => {
-                amHtml += `<div class="game-row"><div class="match-name">${g.match}</div><div class="pick-badge">${g.pick}</div></div>`;
-            });
-            document.getElementById('am-list').innerHTML = amHtml;
+            let amH = '';
+            data.am_slip.forEach(g => { amH += `<div class="game-row"><span>${g.match}</span><span class="pick">${g.pick}</span></div>`; });
+            document.getElementById('am-box').innerHTML = amH;
 
-            let pmHtml = '';
-            data.pm_slip.forEach(g => {
-                pmHtml += `<div class="game-row"><div class="match-name">${g.match}</div><div class="pick-badge">${g.pick}</div></div>`;
-            });
-            document.getElementById('pm-list').innerHTML = pmHtml;
+            let pmH = '';
+            data.pm_slip.forEach(g => { pmH += `<div class="game-row"><span>${g.match}</span><span class="pick">${g.pick}</span></div>`; });
+            document.getElementById('pm-box').innerHTML = pmH;
 
-            let rdHtml = '';
+            let rdH = '';
             data.ten_day_runner.forEach(g => {
-                rdHtml += `<div class="road-item">
-                    <div class="road-date">${g.date}</div>
-                    <div class="road-match">${g.match}</div>
-                    <div class="road-pick">OVER 2.5</div>
-                </div>`;
+                rdH += `<div class="game-row"><span>${g.date} | ${g.match}</span><span style="color:var(--gold)">O2.5</span></div>`;
             });
-            document.getElementById('roadmap-list').innerHTML = rdHtml;
+            document.getElementById('road-box').innerHTML = rdH;
         })
-        .catch(err => console.error("Data Error:", err));
+        .catch(err => {
+            document.body.innerHTML += `<p style="color:red; text-align:center;">DATABASE ERROR: Please run the GitHub Action to generate games!</p>`;
+        });
     </script>
 </body>
 </html>
