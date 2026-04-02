@@ -2,58 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>NEURAL-BET | AI Predictor</title>
+    <title>NEURAL-BET PRO | Elite Accumulator</title>
     <style>
-        :root { --blue: #00d4ff; --green: #39ff14; --gold: #f59e0b; --bg: #0a0b10; }
-        body { background: var(--bg); color: #e2e8f0; font-family: sans-serif; padding: 20px; }
-        .card { background: rgba(255,255,255,0.05); border: 1px solid #334; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { text-align: left; color: #94a3b8; border-bottom: 1px solid #334; padding: 10px; }
-        td { padding: 12px 10px; border-bottom: 1px solid #222; }
-        .today-row { background: rgba(245, 158, 11, 0.2); border: 2px solid var(--gold); font-weight: bold; }
-        .today-badge { background: var(--gold); color: black; padding: 2px 6px; border-radius: 4px; font-size: 0.7em; margin-right: 5px; }
-        .odds-badge { background: var(--blue); color: black; padding: 4px 8px; border-radius: 4px; font-weight: bold; float: right; }
+        :root { --blue: #00d4ff; --green: #39ff14; --gold: #f59e0b; --bg: #05070a; --card: #11141d; }
+        body { background: var(--bg); color: #e2e8f0; font-family: sans-serif; padding: 15px; max-width: 500px; margin: auto; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .month-stat { background: var(--green); color: black; padding: 5px 12px; border-radius: 8px; font-weight: bold; font-size: 0.8rem; }
+
+        .section-label { color: var(--blue); font-size: 0.7rem; letter-spacing: 2px; font-weight: 800; margin-bottom: 10px; display: block; }
+        
+        .slip-card { background: var(--card); border: 1px solid #222; border-radius: 12px; padding: 15px; margin-bottom: 20px; border-left: 4px solid var(--blue); }
+        .game-row { border-bottom: 1px solid #222; padding: 8px 0; display: flex; justify-content: space-between; font-size: 0.9rem; }
+
+        .roadmap-box { background: #161b22; border-radius: 12px; padding: 15px; border: 1px solid #334; }
+        .road-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; font-size: 0.85rem; }
     </style>
 </head>
 <body>
-    <div style="display: flex; justify-content: space-between;">
-        <h1>NEURAL-BET <small id="last-update" style="font-size:0.4em; color:var(--blue)"></small></h1>
-        <div style="background:var(--green); color:black; padding:10px; border-radius:10px; font-weight:bold;">95% ACCURACY</div>
+
+    <div class="header">
+        <h1>NEURAL-BET</h1>
+        <div class="month-stat" id="stat-display">0W - 0L</div>
     </div>
 
-    <div id="slips-container"></div>
-
-    <div class="card">
-        <h2 style="color: var(--gold);">10-DAY ROADMAP (OVER 2.5)</h2>
-        <table>
-            <thead><tr><th>DAY</th><th>MATCH</th><th align="right">STATUS</th></tr></thead>
-            <tbody id="roadmap-body"></tbody>
-        </table>
+    <span class="section-label">DAILY 5-ODD SLIPS</span>
+    
+    <div class="slip-card" style="border-left-color: var(--gold);">
+        <b style="color:var(--gold)">MORNING (AM) SLIP</b>
+        <div id="am-list"></div>
     </div>
+
+    <div class="slip-card">
+        <b>EVENING (PM) SLIP</b>
+        <div id="pm-list"></div>
+    </div>
+
+    <span class="section-label">10-DAY ACCUMULATION ROADMAP</span>
+    <div class="roadmap-box" id="roadmap-list"></div>
 
     <script>
-        fetch('data.json').then(res => res.json()).then(data => {
-            document.getElementById('last-update').innerText = "SYNCED: " + data.last_updated;
-            
-            // Render 10-Day Roadmap
-            const todayStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
-            let roadmapHtml = '';
-            data.ten_day_runner.forEach(g => {
-                const isToday = g.date.includes(todayStr);
-                roadmapHtml += `<tr class="${isToday ? 'today-row' : ''}">
-                    <td>${g.day_number}</td>
-                    <td>${isToday ? '<span class="today-badge">TODAY</span>' : ''}${g.match}<br><small>${g.date}</small></td>
-                    <td align="right">${isToday ? 'ACTIVE' : 'LOCKED'}</td>
-                </tr>`;
-            });
-            document.getElementById('roadmap-body').innerHTML = roadmapHtml;
+        fetch('data.json').then(r => r.json()).then(data => {
+            document.getElementById('stat-display').innerText = data.monthly_stats.wins + "W - " + data.monthly_stats.losses + "L";
 
-            // Render 5-Odd Slips
-            let slipHtml = '';
-            data.daily_slips.forEach(s => {
-                slipHtml += `<div class="card"><span class="odds-badge">ODDS ${s.odds}</span><h3>${s.match}</h3><p style="color:var(--green)">PICK: ${s.pick}</p></div>`;
+            // AM List
+            let amH = ''; data.am_slip.forEach(g => {
+                amH += `<div class="game-row"><span>${g.match}</span><b style="color:var(--green)">${g.pick}</b></div>`;
             });
-            document.getElementById('slips-container').innerHTML = slipHtml;
+            document.getElementById('am-list').innerHTML = amH;
+
+            // PM List
+            let pmH = ''; data.pm_slip.forEach(g => {
+                pmH += `<div class="game-row"><span>${g.match}</span><b style="color:var(--blue)">${g.pick}</b></div>`;
+            });
+            document.getElementById('pm-list').innerHTML = pmH;
+
+            // Roadmap
+            let rdH = ''; data.ten_day_runner.forEach(g => {
+                rdH += `<div class="road-item">
+                    <span>${g.date}</span>
+                    <b>${g.match}</b>
+                    <span style="color:var(--gold)">O2.5</span>
+                </div>`;
+            });
+            document.getElementById('roadmap-list').innerHTML = rdH;
         });
     </script>
 </body>
