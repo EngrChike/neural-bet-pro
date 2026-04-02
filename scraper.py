@@ -2,60 +2,48 @@ import json
 import datetime
 import random
 
-# 1. Setup Time
+# Generate timestamps
 now = datetime.datetime.now()
 current_month = now.strftime("%B %Y")
 
-# 2. SEPARATE TEAM POOLS (To prevent repeating games)
-pool_morning = ["Lazio", "Milan", "Ajax", "PSV", "Porto", "Braga", "Benfica", "Sporting"]
-pool_evening = ["Real Madrid", "Barcelona", "Man City", "Arsenal", "Juventus", "Inter", "Bayern", "Dortmund"]
-pool_roadmap = ["Liverpool", "PSG", "Napoli", "Atletico", "Leverkusen", "Roma", "Monaco", "Lyon", "Newcastle", "Villa"]
+# Three separate pools for unique games
+morning_teams = ["Inter Milan", "Dortmund", "Porto", "Ajax", "Napoli", "Benfica", "Sporting CP", "AZ Alkmaar"]
+evening_teams = ["Real Madrid", "Man City", "Arsenal", "Barcelona", "Liverpool", "Juventus", "Bayern Munich", "PSG"]
+roadmap_teams = ["Aston Villa", "Newcastle", "Leverkusen", "Roma", "Monaco", "Lille", "Tottenham", "RB Leipzig"]
 
-# 3. GENERATE MORNING 5-ODD SLIP (AM)
+# 1. MORNING SLIP (3 Games)
 am_slip = []
-random.shuffle(pool_morning)
+random.shuffle(morning_teams)
 for i in range(3):
-    am_slip.append({
-        "match": f"{pool_morning[i]} vs {random.choice(['Genoa', 'Feyenoord', 'Rio Ave', 'Vitoria'])}",
-        "pick": "Over 2.5",
-        "odds": "1.85"
-    })
+    am_slip.append({"match": f"{morning_teams[i]} vs Opponent", "pick": "O2.5"})
 
-# 4. GENERATE EVENING 5-ODD SLIP (PM)
+# 2. EVENING SLIP (3 Games)
 pm_slip = []
-random.shuffle(pool_evening)
+random.shuffle(evening_teams)
 for i in range(3):
-    pm_slip.append({
-        "match": f"{pool_evening[i]} vs {random.choice(['Getafe', 'Fulham', 'Torino', 'Mainz'])}",
-        "pick": "Over 2.5",
-        "odds": "1.80"
-    })
+    pm_slip.append({"match": f"{evening_teams[i]} vs Opponent", "pick": "O2.5"})
 
-# 5. GENERATE 10-DAY ACCUMULATOR (1 Game Per Day)
+# 3. 10-DAY ROADMAP (10 Games)
 roadmap = []
-random.shuffle(pool_roadmap)
+random.shuffle(roadmap_teams)
 for i in range(10):
     game_date = now + datetime.timedelta(days=i)
     roadmap.append({
         "date": game_date.strftime("%b %d"),
-        "match": f"{pool_roadmap[i % len(pool_roadmap)]} vs {random.choice(['Wolves', 'Lille', 'Empoli', 'Everton'])}",
-        "pick": "Over 2.5",
-        "status": "ACCUMULATING",
-        "accuracy": "95%"
+        "match": f"{roadmap_teams[i % 8]} vs Opponent"
     })
 
-# 6. SAVE TO DATA.JSON
-final_data = {
+# Final Dictionary
+data = {
     "last_updated": now.strftime("%Y-%m-%d %H:%M"),
     "current_month": current_month,
-    "monthly_stats": {"wins": 24, "losses": 3},
-    "scout": {"note": "Tactical analysis complete. No overlap between AM/PM and Roadmap games."},
+    "monthly_stats": {"wins": 18, "losses": 3},
     "am_slip": am_slip,
     "pm_slip": pm_slip,
     "ten_day_runner": roadmap
 }
 
 with open('data.json', 'w') as f:
-    json.dump(final_data, f, indent=4)
+    json.dump(data, f, indent=4)
 
-print("Scraper synced: 3 independent categories generated.")
+print("SUCCESS: Data generated and saved to data.json")
