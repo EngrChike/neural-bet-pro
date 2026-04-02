@@ -3,62 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEURAL-BET | ELITE AI</title>
+    <title>NEURAL-BET | Professional AI Predictions</title>
     <style>
-        :root { --blue: #00f2ff; --green: #39ff14; --gold: #ffcc00; --bg: #080a0c; --card: #12161d; }
-        body { background: var(--bg); color: #fff; font-family: sans-serif; padding: 15px; margin:0; }
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #222; }
-        .stat-pill { background: var(--green); color: #000; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; }
-        .section-title { color: var(--blue); font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; margin: 20px 0 10px; display: block; }
-        .card { background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #2a2f3a; }
-        .game-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1e232d; font-size: 0.9rem; }
-        .pick { color: var(--green); font-weight: bold; }
+        :root { 
+            --blue: #00d4ff; 
+            --green: #39ff14; 
+            --gold: #f59e0b; 
+            --bg: #05070a; 
+            --card: #11141d; 
+            --border: #2a2f3a; 
+        }
+        
+        body { 
+            background: var(--bg); 
+            color: #e2e8f0; 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            padding: 15px; 
+            max-width: 500px; 
+            margin: auto; 
+            line-height: 1.5;
+        }
+        
+        /* Stats Header */
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo { font-size: 1.6rem; font-weight: 900; letter-spacing: -1px; }
+        .win-pill { 
+            background: var(--green); 
+            color: black; 
+            padding: 5px 12px; 
+            border-radius: 20px; 
+            font-weight: bold; 
+            font-size: 0.75rem; 
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+        }
+
+        /* Scouting Box */
+        .scout-box { 
+            background: rgba(0, 212, 255, 0.05); 
+            border: 1px solid var(--blue); 
+            border-radius: 12px; 
+            padding: 15px; 
+            margin-bottom: 25px; 
+            font-size: 0.85rem; 
+        }
+
+        /* Slip Cards */
+        .section-label { 
+            color: var(--blue); 
+            font-size: 0.7rem; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            margin-bottom: 10px; 
+            display: block; 
+        }
+        
+        .slip-card { 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            border-radius: 16px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        
+        .odds-badge { 
+            position: absolute; 
+            top: 15px; 
+            right: 15px; 
+            background: var(--blue); 
+            color: #000; 
+            padding: 3px 8px; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            font-size: 0.7rem; 
+        }
+        
+        .game-row { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 12px 0; 
+            border-bottom: 1px solid #1e232d; 
+        }
+        .game-row:last-child { border: none; }
+        .match-name { font-weight: 600; font-size: 0.9rem; }
+        .pick { color: var(--green); font-weight: 800; font-size: 0.85rem; }
+
+        /* Roadmap Table */
+        .roadmap { 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            border-radius: 16px; 
+            padding: 10px 15px; 
+            margin-bottom: 30px;
+        }
+        .road-item { 
+            display: grid; 
+            grid-template-columns: 75px 1fr 60px; 
+            padding: 12px 0; 
+            border-bottom: 1px solid #1e232d; 
+            font-size: 0.85rem; 
+            align-items: center; 
+        }
+        .road-item:last-child { border: none; }
+        .sync-footer { text-align: center; font-size: 0.65rem; color: #4a5568; margin-top: 20px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <div style="font-size: 1.5rem; font-weight: 900;">NEURAL<span style="color:var(--blue)">-BET</span></div>
-        <div class="stat-pill" id="stats">0W - 0L</div>
+        <div class="logo">NEURAL<span style="color:var(--blue)">-BET</span></div>
+        <div class="win-pill" id="stat-pill">WINS: 0 | LOSS: 0</div>
     </div>
 
-    <span class="section-title">TODAY'S 5-ODD SLIPS</span>
-    <div class="card" style="border-left: 4px solid var(--gold);">
-        <b style="color:var(--gold)">MORNING (AM)</b>
-        <div id="am-box">Loading Morning Games...</div>
+    <div class="scout-box">
+        <b style="color:var(--blue)">SCOUT REPORT:</b> <span id="scout-note">Syncing neural data...</span>
     </div>
 
-    <div class="card" style="border-left: 4px solid var(--blue);">
-        <b style="color:var(--blue)">EVENING (PM)</b>
-        <div id="pm-box">Loading Evening Games...</div>
+    <span class="section-label">Daily 5-Odd Slips</span>
+    
+    <div class="slip-card" style="border-top: 4px solid var(--gold);">
+        <span class="odds-badge">5.50 ODDS</span>
+        <b style="color:var(--gold); font-size: 0.8rem; text-transform: uppercase;">Morning (AM) Slip</b>
+        <div id="am-list">
+            <div style="padding:20px; text-align:center; color:#4a5568;">Loading morning games...</div>
+        </div>
     </div>
 
-    <span class="section-title">10-DAY ROADMAP (O2.5)</span>
-    <div class="card" id="road-box">Loading Roadmap...</div>
+    <div class="slip-card" style="border-top: 4px solid var(--blue);">
+        <span class="odds-badge">5.20 ODDS</span>
+        <b style="color:var(--blue); font-size: 0.8rem; text-transform: uppercase;">Evening (PM) Slip</b>
+        <div id="pm-list">
+            <div style="padding:20px; text-align:center; color:#4a5568;">Loading evening games...</div>
+        </div>
+    </div>
+
+    <span class="section-label">10-Day Accumulator Roadmap</span>
+    <div class="roadmap" id="road-list">
+        <div style="padding:20px; text-align:center; color:#4a5568;">Analyzing upcoming fixtures...</div>
+    </div>
+
+    <div class="sync-footer" id="last-sync">Checking last update...</div>
 
     <script>
-        // The '?v=' + Date.now() forces the browser to bypass the cache
-        fetch('data.json?v=' + Date.now())
-        .then(r => r.json())
-        .then(data => {
-            document.getElementById('stats').innerText = data.monthly_stats.wins + "W - " + data.monthly_stats.losses + "L";
-
-            let amH = '';
-            data.am_slip.forEach(g => { amH += `<div class="game-row"><span>${g.match}</span><span class="pick">${g.pick}</span></div>`; });
-            document.getElementById('am-box').innerHTML = amH;
-
-            let pmH = '';
-            data.pm_slip.forEach(g => { pmH += `<div class="game-row"><span>${g.match}</span><span class="pick">${g.pick}</span></div>`; });
-            document.getElementById('pm-box').innerHTML = pmH;
-
-            let rdH = '';
-            data.ten_day_runner.forEach(g => {
-                rdH += `<div class="game-row"><span>${g.date} | ${g.match}</span><span style="color:var(--gold)">O2.5</span></div>`;
-            });
-            document.getElementById('road-box').innerHTML = rdH;
+        // Use a timestamp to bypass browser cache and force fresh data load
+        const cacheBuster = new Date().getTime();
+        
+        fetch('data.json?v=' + cacheBuster)
+        .then(response => {
+            if (!response.ok) throw new Error('Data file not found');
+            return response.json();
         })
-        .catch(err => {
-            document.body.innerHTML += `<p style="color:red; text-align:center;">DATABASE ERROR: Please run the GitHub Action to generate games!</p>`;
+        .then(data => {
+            // 1. Update Monthly Stats
+            document.getElementById('stat-pill').innerText = 
+                `WINS: ${data.monthly_stats.wins} | LOSS: ${data.monthly_stats.losses}`;
+            
+            // 2. Update Scout Report
+            document.getElementById('scout-note').innerText = data.scout.note;
+            
+            // 3. Update Sync Time
+            document.getElementById('last-sync').innerText = "LAST SYNC: " + data.last_updated;
+
+            // 4. Render Morning (AM) Slip
+            let amHtml = '';
+            data.am_slip.forEach(game => {
+                amHtml += `
+                    <div class="game-row">
+                        <span class="match-name">${game.match}</span>
+                        <span class="pick">${game.pick}</span>
+                    </div>`;
+            });
+            document.getElementById('am-list').innerHTML = amHtml;
+
+            // 5. Render Evening (PM) Slip
+            let pmHtml = '';
+            data.pm_slip.forEach(game => {
+                pmHtml += `
+                    <div class="game-row">
+                        <span class="match-name">${game.match}</span>
+                        <span class="pick">${game.pick}</span>
+                    </div>`;
+            });
+            document.getElementById('pm-list').innerHTML = pmHtml;
+
+            // 6. Render 10-Day Roadmap
+            let roadHtml = '';
+            data.ten_day_runner.forEach(day => {
+                roadHtml += `
+                    <div class="road-item">
+                        <span style="color:#707785">${day.date}</span>
+                        <span style="font-weight:600; text-align:center;">${day.match}</span>
+                        <span style="color:var(--gold); text-align:right; font-weight:800;">O2.5</span>
+                    </div>`;
+            });
+            document.getElementById('road-list').innerHTML = roadHtml;
+        })
+        .catch(error => {
+            console.error("Error loading predictions:", error);
+            document.getElementById('scout-note').innerHTML = 
+                "<span style='color:red'>Data Sync Offline. Please run the GitHub Action manually.</span>";
         });
     </script>
 </body>
